@@ -106,6 +106,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>Admin-WS</finalName>
 	</build>
 	<repositories>
 		<repository>
