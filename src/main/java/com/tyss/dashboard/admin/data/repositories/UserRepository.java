@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import com.tyss.dashboard.admin.data.entities.UserEntity;
 
-@Repository("TrainerRepository")
+@Repository("UserRepository")
 public interface UserRepository extends MongoRepository<UserEntity, String> {
 
 	public boolean existsByEmail(String email);

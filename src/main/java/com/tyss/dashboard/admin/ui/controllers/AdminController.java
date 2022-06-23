@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tyss.dashboard.admin.api.client.BatchConsumer;
+import com.tyss.dashboard.admin.api.client.UsersConsumer;
 import com.tyss.dashboard.admin.api.services.BatchServicesImpl;
 import com.tyss.dashboard.admin.api.services.BranchServicesImpl;
 import com.tyss.dashboard.admin.api.services.StudentServiceImpl;
@@ -25,6 +29,7 @@ import com.tyss.dashboard.admin.data.entities.StudentEntity;
 import com.tyss.dashboard.admin.data.entities.UserEntity;
 import com.tyss.dashboard.admin.model.BatchDto;
 import com.tyss.dashboard.admin.model.BranchDto;
+import com.tyss.dashboard.admin.model.DeleteUserRequestModel;
 import com.tyss.dashboard.admin.model.UserDto;
 
 @RestController
@@ -45,6 +50,16 @@ public class AdminController {
 
 	@Autowired
 	TrainerServiceImpl trainerServiceImpl;
+	
+	@Autowired
+	BatchConsumer batchConsumer;
+	
+	@Autowired
+	UsersConsumer usersConsumer;
+	
+	Logger logger = LoggerFactory.getLogger(AdminController.class);
+
+	
 
 	ModelMapper mapper;
 
@@ -58,23 +73,31 @@ public class AdminController {
 
 		return "working";
 	}
+	
 
 	@PostMapping("create/user")
 	public ResponseEntity<String> createUser(@RequestBody UserDto addTrainerRequestModel) {
 
-		return userManagementServiceImpl.addUser(mapper.map(addTrainerRequestModel, UserEntity.class));
+		System.out.println("AdminController : createUser");
+		return usersConsumer.createUser(addTrainerRequestModel);
 	}
 
 	@PostMapping("update/user")
 	public ResponseEntity<String> updateUser(@RequestBody UserEntity userEntity) {
 
-		return userManagementServiceImpl.editUser(userEntity);
+		return usersConsumer.updateUser(userEntity);
 	}
 
 	@GetMapping("view/user")
 	public ResponseEntity<UserEntity> viewUser(@RequestParam String phone) {
 
-		return userManagementServiceImpl.viewUser(phone);
+		return usersConsumer.viewUser(phone);
+	}
+	
+	@GetMapping("get/all/users")
+	public ResponseEntity<List<UserEntity>> viewAllUsers() {
+
+		return usersConsumer.viewAllUsers();
 	}
 
 	@GetMapping("view/trainer")
@@ -90,39 +113,42 @@ public class AdminController {
 	}
 
 	@DeleteMapping("delete/user")
-	public ResponseEntity<String> deleteTrainer(@RequestBody UserEntity trainer) {
+	public ResponseEntity<String> deleteUser(@RequestBody DeleteUserRequestModel deleteUserRequestModel) {
+		
+		logger.info("INSIDE DELETE CONTROLLER");
 
-		return userManagementServiceImpl.deleteUser(trainer);
+		return usersConsumer.deleteUser(deleteUserRequestModel);
 	}
 
 	@PostMapping("create/batch")
 	public ResponseEntity<String> createBatch(@RequestBody BatchDto batchDto) {
 
-		return batchServicesImpl.createBatch(mapper.map(batchDto, BatchEntity.class));
+	return batchConsumer.createBatch(batchDto);
+
 	}
 
 	@GetMapping("view/batch")
 	public ResponseEntity<BatchEntity> viewBatch(@RequestParam String batchCode) {
 
-		return batchServicesImpl.viewBatch(batchCode);
+		return batchConsumer.viewBatch(batchCode);
 	}
 
 	@GetMapping("view/trainer/batch")
 	public ResponseEntity<List<BatchEntity>> viewBatchByTrainer(@RequestParam String trainerID) {
 
-		return batchServicesImpl.viewBatchByTrainer(trainerID);
+		return batchConsumer.viewBatchByTrainer(trainerID);
 	}
 
 	@PostMapping("update/batch")
 	public ResponseEntity<String> updateBatch(@RequestBody BatchEntity batch) {
 
-		return batchServicesImpl.updateBatch(batch);
+		return batchConsumer.updateBatch(batch);
 	}
 
 	@DeleteMapping("delete/batch")
 	public ResponseEntity<String> deleteBatch(@RequestBody BatchEntity batch) {
 
-		return batchServicesImpl.deleteBatch(batch);
+		return batchConsumer.deleteBatch(batch);
 	}
 
 	@PostMapping("create/branch")
