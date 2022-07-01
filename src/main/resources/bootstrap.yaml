@@ -1,6 +1,6 @@
 spring:  
   application:
-    name: admin-service
+    name: flinko-listner
   cloud:
     consul:
       host: localhost

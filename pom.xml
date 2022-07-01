@@ -9,11 +9,11 @@
 		<version>2.7.0</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.tyss.dashboard.admin</groupId>
-	<artifactId>Admin-service</artifactId>
+	<groupId>com.flinko.listner</groupId>
+	<artifactId>Flinko-Listner</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Admin-service</name>
-	<description>Admin Service</description>
+	<name>Flinko-Listner</name>
+	<description>Flinko_listner</description>
 	<properties>
 		<java.version>17</java.version>
 		<spring-cloud.version>2021.0.3-SNAPSHOT</spring-cloud.version>
@@ -51,6 +51,12 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-mongodb</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>io.github.ajclopez</groupId>
+			<artifactId>mongo-spring-search</artifactId>
+			<version>1.0.1</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.modelmapper/modelmapper -->
@@ -112,7 +118,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
-		<finalName>Admin-WS</finalName>
+		<finalName>Flinko-Listner</finalName>
 	</build>
 	<repositories>
 		<repository>
